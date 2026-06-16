@@ -1,0 +1,542 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nitrovicgem Roblox Developer Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --neon-blue: #00d4ff;
+            --neon-purple: #b829dd;
+            --dark-bg: #0a0a0f;
+            --card-bg: #151520;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0b0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--dark-bg);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        .bg-animation {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; z-index: -1;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(184, 41, 221, 0.15) 0%, transparent 50%);
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+        @keyframes bgPulse {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.05); }
+        }
+        nav {
+            position: fixed; top: 0; width: 100%;
+            padding: 20px 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        .logo {
+            font-family: 'Orbitron', sans-serif; font-size: 1.5rem; font-weight: 900;
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding: 100px 50px;
+        }
+        .hero-content { text-align: center; max-width: 900px; }
+        .hero h1 {
+            font-family: 'Orbitron', sans-serif; font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900; margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p { font-size: 1.3rem; color: var(--text-secondary); margin-bottom: 40px; }
+        .btn {
+            padding: 15px 40px; font-family: 'Orbitron', sans-serif;
+            font-size: 1rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; text-decoration: none; display: inline-block;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+            color: white; clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 212, 255, 0.4); }
+        section { padding: 100px 50px; max-width: 1400px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 {
+            font-family: 'Orbitron', sans-serif; font-size: 2.5rem; margin-bottom: 15px;
+        }
+        .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .work-card {
+            background: var(--card-bg); border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 15px; overflow: hidden; transition: all 0.4s;
+        }
+        .work-card:hover {
+            transform: translateY(-10px); border-color: var(--neon-blue);
+            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.2);
+        }
+        .video-thumbnail {
+            position: relative;
+            height: 220px;
+            overflow: hidden;
+            display: block;
+            text-decoration: none;
+            cursor: pointer;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+        }
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .work-card:hover .video-thumbnail img {
+            transform: scale(1.1);
+        }
+        .play-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.3s;
+        }
+        .video-thumbnail:hover .play-overlay {
+            background: rgba(0, 0, 0, 0.15);
+        }
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 0, 0, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .play-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 20px solid white;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 5px;
+        }
+        .video-thumbnail:hover .play-button {
+            transform: scale(1.1);
+            background: rgba(255, 0, 0, 1);
+        }
+        .work-info { padding: 25px; }
+        .work-tags { display: flex; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
+        .tag {
+            padding: 5px 12px; background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3); border-radius: 20px;
+            font-size: 0.8rem; color: var(--neon-blue);
+        }
+        .work-info h3 { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; margin-bottom: 10px; }
+        .work-info p { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px; }
+        .work-links { display: flex; gap: 10px; flex-wrap: wrap; }
+        .work-link {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: var(--neon-blue); text-decoration: none; font-weight: 600;
+            transition: all 0.3s; padding: 8px 16px;
+            border: 1px solid var(--neon-blue); border-radius: 8px; font-size: 0.9rem;
+        }
+        .work-link:hover { background: var(--neon-blue); color: white; }
+        .skills-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .skill-category {
+            background: var(--card-bg); border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 15px; padding: 30px;
+        }
+        .skill-category h3 { font-family: 'Orbitron', sans-serif; color: var(--neon-blue); margin-bottom: 15px; }
+        .skill-list { list-style: none; }
+        .skill-list li { padding: 8px 0; color: var(--text-secondary); }
+        .contact {
+            text-align: center; background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(184, 41, 221, 0.05));
+            border-radius: 30px; padding: 80px 50px; border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+        .contact h2 { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; margin-bottom: 20px; }
+        footer { text-align: center; padding: 40px; color: var(--text-secondary); border-top: 1px solid rgba(0, 212, 255, 0.1); }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <nav><div class="logo"> Dev</div></nav>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Nitrovicgem Roblox Game Developer</h1>
+            <p>Creating immersive experiences with advanced scripting, VFX, UI design, and game systems.</p>
+            <a href="#work" class="btn btn-primary">View My Work</a>
+        </div>
+    </section>
+
+    <section id="work">
+        <div class="section-header">
+            <h2>My Work</h2>
+            <p>Click any video to watch on YouTube</p>
+        </div>
+        <div class="work-grid">
+            
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 1 - VFX SHOWCASE -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <div class="work-card">
+                <a href="https://youtu.be/YKWQYPnGFz4" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/YKWQYPnGFz4/maxresdefault.jpg" alt="VFX Showcase" onerror="this.src='https://img.youtube.com/vi/BhjD9jffS6E/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag">VFX</span>
+                        <span class="tag">Particles</span>
+                    </div>
+                    <h3>VFX Compilation Showcase</h3>
+                    <p>Multiple visual effects showcase for Roblox games including particle systems, lighting effects, and atmospheric elements.</p>
+                    <div class="work-links">
+                        <a href="https://youtu.be/YKWQYPnGFz4" class="work-link" target="_blank">▶ Watch on YouTube</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 2 - STEAL ANIME BRAINROT GAME -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <div class="work-card">
+                <a href="https://youtu.be/xSBxGLwCbpM" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/xSBxGLwCbpM/maxresdefault.jpg" alt="Admin Panel" onerror="this.src='https://img.youtube.com/vi/xSBxGLwCbpM/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag">Complete With UI Design</span>
+                        <span class="tag">Sword basic combat</span>
+                    </div>
+                    <h3>Brainrot with Admin Panel System</h3>
+                    <p>Complete game with admin panel for commands.</p>
+                    <div class="work-links">
+                        <a href="https://www.roblox.com/games/103316015367817/Steal-a-sammy" class="work-link" target="_blank">🎮 Play on Roblox</a>
+                        <a href="https://youtu.be/xSBxGLwCbpM" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 3 - CITY MAP -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <div class="work-card">
+                <a href="https://youtu.be/3S9xI9PF4VA" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/3S9xI9PF4VA/maxresdefault.jpg" alt="VEHICLE SYSTEM " onerror="this.src='https://img.youtube.com/vi/3S9xI9PF4VA/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag"> City</span>
+                        <span class="tag">Map</span>
+                    </div>
+                    <h3>Pink Slip</h3>
+                    <p>Game map with base building and car systems.</p>
+                    <div class="work-links">
+                        <a href="https://www.roblox.com/games/112797478341618/PINK-SLIP" class="work-link" target="_blank">🎮 Play on Roblox</a>
+                        <a href="https://youtu.be/c" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 4 - Hood City Roleplay -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+                        <div class="work-card">
+                <a href="https://youtu.be/BXPt2DLIklQ" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/BXPt2DLIklQ/maxresdefault.jpg" alt="VEHICLE SYSTEM " onerror="this.src='https://img.youtube.com/vi/BXPt2DLIklQ/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag"> Hood Roleplay Game</span>
+                        <span class="tag"> Roleplay game</span>
+                    </div>
+                    <h3>Roleplay Game Map</h3>
+                    <p>Game with Job and Economy systems.</p>
+                    <div class="work-links">
+                        <a href="https://youtu.be/BXPt2DLIklQ" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 5 - Stage obby -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+                        <div class="work-card">
+                <a href="https://youtu.be/QjWFlXQ89SI" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/QjWFlXQ89SI/maxresdefault.jpg" alt="VEHICLE SYSTEM " onerror="this.src='https://img.youtube.com/vi/QjWFlXQ89SI/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag"> Obby Game</span>
+                        <span class="tag">stage obby</span>
+                    </div>
+                    <h3>Obby Game</h3>
+                    <p> Full obby game with game UI, gamepasses.</p>
+                    <div class="work-links">
+                        <a href="https://www.roblox.com/games/108482130573430/obby-mre" class="work-link" target="_blank">🎮 Play on Roblox</a>
+                        <a href="https://youtu.be/QjWFlXQ89SI" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 6 - HORROR GAME -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+                        <div class="work-card">
+                <a href="https://youtu.be/BhjD9jffS6E" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/BhjD9jffS6E/maxresdefault.jpg" alt="HORROR GAME " onerror="this.src='https://img.youtube.com/vi/BhjD9jffS6E/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag"> Castle</span>
+                        <span class="tag">Map</span>
+                    </div>
+                    <h3> 100 Days In The Castle</h3>
+                    <p>Castle inspired by 99night in the forest game.</p>
+                    <div class="work-links">
+                        <a href="http://roblox.com/games/105557644168532/Castle-map" class="work-link" target="_blank">🎮 Play on Roblox</a>
+                        <a href="https://youtu.be/BhjD9jffS6E" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+            </div>
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 7 - CAMERA SYSTEM -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+                        <div class="work-card">
+                <a href="https://youtu.be/JJa_RO_bAew" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/JJa_RO_bAew/maxresdefault.jpg" alt="VEHICLE SYSTEM " onerror="this.src='https://img.youtube.com/vi/JJa_RO_bAew/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag"> CCTV Camera system</span>
+                        <span class="tag">Admin Camera control</span>
+                    </div>
+                    <h3> Camera System</h3>
+                    <p>Fnaf inspired game cctv camera systems, i did the game map as well.</p>
+                    <div class="work-links">
+                        
+                        <a href="https://youtu.be/3S9xI9PF4VA" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 8 - JOB SYSTEM AND ADMIN COMMAND-->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+                        <div class="work-card">
+                <a href="https://youtu.be/1XezX7vlJNE" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/1XezX7vlJNE/maxresdefault.jpg" alt="VEHICLE SYSTEM " onerror="this.src='https://img.youtube.com/vi/1XezX7vlJNE/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag"> Character Customization System</span>
+                        <span class="tag">Avatar Editor</span>
+                    </div>
+                    <h3>Avater Customization and UI Design</h3>
+                    <p>Game Avatar customization with UI design.</p>
+                    <div class="work-links">
+                      
+                        <a href="https://youtu.be/1XezX7vlJNEhttps://youtu.be/1XezX7vlJNE" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 9 - AI SYSTEM -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+                        <div class="work-card">
+                <a href="https://youtu.be/6IAlSQ6AhME" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/6IAlSQ6AhME/maxresdefault.jpg" alt="VEHICLE SYSTEM " onerror="this.src='https://img.youtube.com/vi/6IAlSQ6AhMEhqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag"> AI Cop</span>
+                        <span class="tag">Gun System</span>
+                    </div>
+                    <h3> Aiming System</h3>
+                    <p>Swat AI with gun systems and aiming.</p>
+                    <div class="work-links">
+                     
+                        <a href="https://youtu.be/6IAlSQ6AhME" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 10 - LOBBY -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+             <div class="work-card">
+                <a href=" <div class="work-card">
+                <a href="https://youtu.be/lPRBHjVO22c" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/lPRBHjVO22c/maxresdefault.jpg" alt="VEHICLE SYSTEM " onerror="this.src='https://img.youtube.com/vi/lPRBHjVO22c/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag"> Beon Lobby </span>
+                        <span class="tag"> Futuristic Lobby Map</span>
+                    </div>
+                   
+                     
+                        <a href="https://youtu.be/lPRBHjVO22c" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+
+   
+	<!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 11 - CLINIC JOB AND ADMIN -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+			            <div class="work-card">
+                <a href="https://youtu.be/TbHmbRHYjXE" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/TbHmbRHYjXE/maxresdefault.jpg" alt="VEHICLE SYSTEM " onerror="this.src='https://img.youtube.com/vi/TbHmbRHYjXE/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag">Job Application System</span>
+                        <span class="tag">Admin Panel</span>
+                    </div>
+                    <h3> Job Career</h3>
+                    <p> Eye Clinic Game .</p>
+                    <div class="work-links">
+                        <a href="https://www.roblox.com/games/138578218710358/Visionix" class="work-link" target="_blank">🎮 Play on Roblox</a>
+                        <a href="https://youtu.be/TbHmbRHYjXE" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+				
+				
+				<!-- ═══════════════════════════════════════════════════════════════ -->
+            <!-- VIDEO 12 - WEATHER SYSTEM -->
+            <!-- ═══════════════════════════════════════════════════════════════ -->
+            </div>            <div class="work-card">
+                <a href="https://youtu.be/I5rXBpuUorg" target="_blank" class="video-thumbnail">
+                    <img src="https://img.youtube.com/vi/I5rXBpuUorg/maxresdefault.jpg" alt="VEHICLE SYSTEM " onerror="this.src='https://img.youtube.com/vi/I5rXBpuUorg/hqdefault.jpg'">
+                    <div class="play-overlay">
+                        <div class="play-button"></div>
+                    </div>
+                </a>
+                <div class="work-info">
+                    <div class="work-tags">
+                        <span class="tag"> Weather System</span>
+                        <span class="tag"> Weather Forecast</span>
+                    </div>
+                    <h3>Weather ForecastSystem </h3>
+                    <p>Weather Forecast System with UI.</p>
+                    <div class="work-links">
+        
+                        <a href="https://youtu.be/I5rXBpuUorg" class="work-link" target="_blank">▶ Watch</a>
+                    </div>
+                </div>
+            </div>
+
+    <!-- (everything above stays exactly the same, only ADD this at the bottom before </body>) -->
+
+<section id="skills">
+    <div class="section-header"><h2>Skills</h2></div>
+    <div class="skills-container">
+        <div class="skill-category">
+            <h3>💻 Scripting</h3>
+            <ul class="skill-list"><li>Lua / Luau</li><li>Roblox API</li><li>Data Stores</li></ul>
+        </div>
+
+        <div class="skill-category">
+            <h3>✨ VFX</h3>
+            <ul class="skill-list"><li>Particle Effects</li><li>Lighting</li><li>Animations</li></ul>
+        </div>
+
+        <div class="skill-category">
+            <h3>🎨 UI Design</h3>
+            <ul class="skill-list"><li>Admin Panels</li><li>HUD Design</li><li>Menu Systems</li></ul>
+        </div>
+
+        <div class="skill-category">
+            <h3>⚙️ Systems</h3>
+            <ul class="skill-list"><li>Tycoon Systems</li><li>Economy</li><li>Progression</li></ul>
+        </div>
+    </div>
+</section>
+
+<!-- ================= CONTACT SECTION ================= -->
+
+<section id="contact">
+    <div class="contact">
+        <h2>Let's Work Together</h2>
+        <p>Available for commissions and collaborations</p>
+
+        <div style="margin-top:30px; display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
+
+            <!-- DISCORD -->
+            <a href="https://discord.com/users/nict5546" target="_blank"
+               style="padding:12px 20px;border:1px solid #5865F2;color:#5865F2;text-decoration:none;border-radius:10px;">
+                💬 Discord
+            </a>
+
+            <!-- EMAIL -->
+            <a href="mailto:nitrovicjamm.com"
+               style="padding:12px 20px;border:1px solid #00d4ff;color:#00d4ff;text-decoration:none;border-radius:10px;">
+                📧 Email
+            </a>
+
+            <!-- YOUTUBE -->
+            <a href="https://youtube.com/@nitrovicjamm?si=XcnTec5m4kYgtH6D" target="_blank"
+               style="padding:12px 20px;border:1px solid #1877F2;color:#1877F2;text-decoration:none;border-radius:10px;">
+                📘 YouTube
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Roblox Dev Portfolio</p>
+</footer>
+
+</body>
+</html>
